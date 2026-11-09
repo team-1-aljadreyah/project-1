@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { api, type WelfareRequest, type WelfareStatus } from "@/lib/api";
 import { dateTime, yearDate } from "@/lib/display";
 import { errorText, useT } from "@/lib/i18n";
+import { useMediaUrl } from "@/lib/media";
 import { useLoad } from "@/lib/useLoad";
 import { localToday } from "@/lib/validation";
 import { Button, Card, EmptyState, ErrorState, Field, Input, PageHeader } from "@/components/common";
@@ -27,6 +28,8 @@ function RequestCard({ request: w, onDone }: { request: WelfareRequest; onDone: 
   const [reason, setReason] = useState("");
   const [saving, setSaving] = useState(false);
   const [zoom, setZoom] = useState(false);
+  // The photo is on the backend: this gives the full address the browser can open.
+  const photo = useMediaUrl(w.photo_url, "welfare");
 
   async function review(approve: boolean) {
     setSaving(true);
@@ -44,7 +47,7 @@ function RequestCard({ request: w, onDone }: { request: WelfareRequest; onDone: 
     <li className="grid gap-4 py-4 sm:grid-cols-[14rem_1fr]" data-welfare-request={w.id}>
       <button type="button" onClick={() => setZoom(!zoom)} className="block overflow-hidden rounded-lg border border-slate-200 bg-slate-50" aria-label={t("welfare.review.zoom")}>
         {/* eslint-disable-next-line @next/next/no-img-element -- a private photo from the API, shown as it is */}
-        <img src={w.photo_url} alt={t("welfare.photo")} className={`w-full object-contain ${zoom ? "max-h-[32rem]" : "max-h-40"}`} />
+        <img src={photo || undefined} alt={t("welfare.photo")} className={`w-full object-contain ${zoom ? "max-h-[32rem]" : "max-h-40"}`} />
       </button>
       <div className="space-y-2 text-sm">
         <p className="text-base font-semibold">

@@ -4,6 +4,7 @@ import { ArrowDown, ArrowUp } from "lucide-react";
 import type { LabResult, ResultRow, Service } from "@/lib/api";
 import { money } from "@/lib/display";
 import { useT } from "@/lib/i18n";
+import { useMediaUrl } from "@/lib/media";
 
 export function serviceName(service: Service, locale: "ar" | "en") {
   return locale === "ar" ? service.name_ar : service.name;
@@ -95,13 +96,26 @@ export function ResultView({ result }: { result: LabResult }) {
       </div>
     );
   }
+  return <FileResult result={result} />;
+}
+
+// A result sent as a file (a scan or a PDF): a preview when it is a picture, and a download link.
+function FileResult({ result }: { result: Extract<LabResult, { type: "file" }> }) {
+  const { t } = useT();
+  // The file is on the backend: this gives an address the browser can open ("" while it loads).
+  const url = useMediaUrl(result.data_url, "lab-results");
   return (
     <div className="space-y-2">
-      {result.file_type.startsWith("image/") && (
+      {result.file_type.startsWith("image/") && url && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={result.data_url} alt={result.file_name} className="max-h-48 rounded-lg border border-slate-200" />
+        <img src={url} alt={result.file_name} className="max-h-48 rounded-lg border border-slate-200" />
       )}
-      <a href={result.data_url} download={result.file_name} className="inline-block text-sm font-medium text-brand-600 underline">
+      <a
+        href={url || undefined}
+        download={result.file_name}
+        aria-disabled={!url}
+        className={`inline-block text-sm font-medium text-brand-600 underline ${url ? "" : "pointer-events-none opacity-60"}`}
+      >
         {t("lab.download")}: {result.file_name}
       </a>
       {result.note && <p className="rounded-lg bg-slate-100 px-3 py-2 text-sm">{result.note}</p>}
