@@ -319,7 +319,7 @@ export default function DoctorPage() {
   const { t } = useT();
   const { session } = useSession();
   const doctorId = session?.user.doctor_id ?? 0;
-  const { state, reload } = useLoad(() => api.doctorQueue(doctorId), String(doctorId), { every: 4000 });
+  const { state, reload } = useLoad(() => api.doctorQueue(doctorId), String(doctorId), { every: 4000, live: ["appointment.*", "visit.*", "lab.result_confirmed"] });
   const services = useLoad(api.listServices);
 
   async function callNext(id: number) {

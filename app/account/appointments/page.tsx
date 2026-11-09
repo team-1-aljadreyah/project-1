@@ -223,7 +223,7 @@ function FollowUps() {
 
 export default function AppointmentsPage() {
   const { t } = useT();
-  const { state, reload } = useLoad(() => Promise.all([api.myAppointments(), api.getSettings()]), "", { every: 4000 });
+  const { state, reload } = useLoad(() => Promise.all([api.myAppointments(), api.getSettings()]), "", { every: 4000, live: ["payment.settled", "notification.created", "appointment.*"] });
 
   return (
     <>

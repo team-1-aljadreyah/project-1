@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLive } from "./live";
 
 export type LoadState<T> =
   | { status: "loading" }
@@ -9,7 +10,7 @@ export type LoadState<T> =
 
 type Result<T> = { key: string; at: number } & ({ status: "error"; error: unknown } | { status: "success"; data: T });
 
-export function useLoad<T>(fetcher: () => Promise<T>, key = "", options: { every?: number; keepPrevious?: boolean } = {}) {
+export function useLoad<T>(fetcher: () => Promise<T>, key = "", options: { every?: number; keepPrevious?: boolean; live?: string[] } = {}) {
   const fetcherRef = useRef(fetcher);
   useEffect(() => {
     fetcherRef.current = fetcher;
@@ -50,6 +51,9 @@ export function useLoad<T>(fetcher: () => Promise<T>, key = "", options: { every
       document.removeEventListener("visibilitychange", poll);
     };
   }, [every, refresh]);
+
+  // live: server events that make this data refresh at once (see lib/live.ts), e.g. ["visit.*"].
+  useLive(options.live, refresh);
 
   // keepPrevious leaves the last list on screen while a new search loads, instead of the skeleton.
   const showOld = options.keepPrevious && result?.status === "success";

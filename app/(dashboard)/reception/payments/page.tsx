@@ -100,7 +100,7 @@ function InvoiceCard({ invoice, usdRate, onPaid }: { invoice: Invoice; usdRate: 
 
 export default function PaymentsPage() {
   const { t } = useT();
-  const { state, reload } = useLoad(() => Promise.all([api.todayInvoices(), api.getSettings()]), "", { every: 8000 });
+  const { state, reload } = useLoad(() => Promise.all([api.todayInvoices(), api.getSettings()]), "", { every: 8000, live: ["payment.settled", "appointment.*"] });
 
   return (
     <>

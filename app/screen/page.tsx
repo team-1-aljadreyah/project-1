@@ -145,7 +145,7 @@ function DoctorPanel({ item, fresh, fit }: { item: ScreenDoctor; fresh: boolean;
 // The waiting room TV. No sign-in: it only shows ticket numbers, never names.
 export default function QueueScreenPage() {
   const { t, locale } = useT();
-  const { state, reload } = useLoad(api.queueScreen, "", { every: 3000 });
+  const { state, reload } = useLoad(api.queueScreen, "", { every: 3000, live: ["appointment.*", "visit.*", "doctor.late", "doctor.absent"] });
   const doctorList = useLoad(api.listDoctors, "", { every: 60_000 });
   const branch = useSyncExternalStore(subscribeBranch, readBranch, () => "all" as const);
   const slidesOn = useSyncExternalStore(subscribeBranch, readSlides, () => true);

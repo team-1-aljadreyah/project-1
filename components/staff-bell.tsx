@@ -12,7 +12,7 @@ import { useLoad } from "@/lib/useLoad";
 // Opening the list marks everything as read; the count updates every 15 seconds.
 export function StaffBell() {
   const { t, locale } = useT();
-  const { state, refresh } = useLoad(api.myNotifications, "", { every: 15000 });
+  const { state, refresh } = useLoad(api.myNotifications, "", { every: 15000, live: ["notification.created", "lab.result_confirmed"] });
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   const list = state.status === "success" ? state.data : [];

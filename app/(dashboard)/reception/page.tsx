@@ -19,7 +19,7 @@ import { HeartPulse } from "lucide-react";
 
 function QueueCard({ doctor, version }: { doctor: Doctor; version: number }) {
   const { t, locale } = useT();
-  const { state, reload, refresh } = useLoad(() => api.doctorQueue(doctor.id), String(doctor.id), { every: 4000 });
+  const { state, reload, refresh } = useLoad(() => api.doctorQueue(doctor.id), String(doctor.id), { every: 4000, live: ["appointment.*", "visit.*", "doctor.late", "doctor.absent"] });
   // The patient whose measurements are being typed in, if any.
   const [measuring, setMeasuring] = useState<number | null>(null);
 
@@ -201,7 +201,7 @@ function WalkInCard({ doctors, onAdded }: { doctors: Doctor[]; onAdded: () => vo
 export default function ReceptionPage() {
   const { t, locale } = useT();
   const doctors = useLoad(api.listDoctors);
-  const booked = useLoad(api.bookedToday, "", { every: 4000 });
+  const booked = useLoad(api.bookedToday, "", { every: 4000, live: ["appointment.*", "payment.settled"] });
   // Goes up by one after every change at the desk, so the queue cards fetch again.
   const [version, setVersion] = useState(0);
   const online = useOnline();

@@ -20,7 +20,7 @@ const ABOUT_MS = 15_000;
 export default function InfoScreenPage() {
   const { t, locale } = useT();
   const doctorList = useLoad(api.listDoctors, "", { every: 60_000 });
-  const today = useLoad(api.queueScreen, "", { every: 30_000 });
+  const today = useLoad(api.queueScreen, "", { every: 30_000, live: ["appointment.*", "visit.*", "doctor.late", "doctor.absent"] });
   const doctors = doctorList.state.status === "success" ? doctorList.state.data : [];
   const todayData = today.state.status === "success" ? today.state.data : [];
   const perPage = useDoctorsPerPage();

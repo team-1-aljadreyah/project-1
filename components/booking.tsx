@@ -81,7 +81,7 @@ export function SlotPicker({
   onPick: (time: string) => void;
 }) {
   const { t } = useT();
-  const { state, reload } = useLoad(() => api.doctorSlots(doctorId, date, kind), `${doctorId}|${date}|${kind}`, { every: 4000 });
+  const { state, reload } = useLoad(() => api.doctorSlots(doctorId, date, kind), `${doctorId}|${date}|${kind}`, { every: 4000, live: ["appointment.*"] });
 
   if (!date) return <p className="text-sm text-slate-500">{t("book.pickDay")}</p>;
   if (state.status === "loading") return <Skeleton className="h-24 w-full" />;

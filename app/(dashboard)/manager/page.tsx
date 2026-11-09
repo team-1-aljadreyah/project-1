@@ -19,7 +19,7 @@ const STATS = [
 
 export default function ManagerPage() {
   const { t } = useT();
-  const overview = useLoad(api.managerOverview, "", { every: 10000 });
+  const overview = useLoad(api.managerOverview, "", { every: 10000, live: ["appointment.*", "visit.*", "payment.settled"] });
   const audit = useLoad(() => api.listAudit({ limit: 5 }));
 
   return (

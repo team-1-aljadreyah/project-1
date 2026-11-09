@@ -11,7 +11,7 @@ import { CardsSkeleton } from "@/components/skeleton";
 
 export default function NotificationsPage() {
   const { t, locale } = useT();
-  const { state, reload } = useLoad(api.myNotifications, "", { every: 15000 });
+  const { state, reload } = useLoad(api.myNotifications, "", { every: 15000, live: ["notification.created"] });
 
   // Opening this page marks every message as read.
   useEffect(() => {
