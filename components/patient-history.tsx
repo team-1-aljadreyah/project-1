@@ -9,7 +9,7 @@ import { errorText, useT, type MessageKey } from "@/lib/i18n";
 import { usePaged } from "@/lib/paging";
 import { useLoad } from "@/lib/useLoad";
 import { localToday } from "@/lib/validation";
-import { Button, Card, EmptyState, ErrorState, Input, MedicineList, PageHeader, Pager, StatusBadge } from "@/components/common";
+import { Button, Card, EmptyState, ErrorState, Input, LoadError, MedicineList, PageHeader, Pager, StatusBadge } from "@/components/common";
 import { AmountsText, amountText } from "@/components/money";
 import { ResultView, serviceName } from "@/components/result-view";
 import { PrintButton, PrintSection } from "@/components/print";
@@ -292,7 +292,7 @@ function PatientFileView({ patientId, medical, onBack }: { patientId: number; me
         {t("patients.back")}
       </Button>
       {state.status === "loading" && <CardsSkeleton count={4} />}
-      {state.status === "error" && <ErrorState message={errorText(state.error, t)} onRetry={reload} />}
+      {state.status === "error" && <LoadError error={state.error} onRetry={reload} />}
       {state.status === "success" && (
         <>
           <Card className="flex flex-wrap items-center justify-between gap-3">

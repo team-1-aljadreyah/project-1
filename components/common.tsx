@@ -5,7 +5,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { AppointmentStatus, DoseInstructions, Medicine } from "@/lib/api/types";
 import { STATUS_COLOR } from "@/lib/display";
-import { useT, type MessageKey } from "@/lib/i18n";
+import { errorText, useT, type MessageKey } from "@/lib/i18n";
+import { ApiError } from "@/lib/api/errors";
+import { useSession } from "@/lib/auth";
 import { Badge } from "@/components/ui/badge";
 import { Button as UIButton, buttonVariants } from "@/components/ui/button";
 import { Card as UICard } from "@/components/ui/card";
@@ -111,6 +113,18 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
       )}
     </div>
   );
+}
+
+// Something that failed to load. When the server says "not allowed" (403), trying again can't help,
+// so a calm note shows instead of the red box with its Retry button.
+export function LoadError({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
+  const { t } = useT();
+  const { session } = useSession();
+  if (error instanceof ApiError && error.status === 403) {
+    const hint = session?.user.role === "doctor" ? "patients.noAccessDoctor" : "patients.noAccessHint";
+    return <EmptyState title={t("patients.noAccess")} description={t(hint)} />;
+  }
+  return <ErrorState message={errorText(error, t)} onRetry={onRetry} />;
 }
 
 export function StatusBadge({ status }: { status: AppointmentStatus }) {

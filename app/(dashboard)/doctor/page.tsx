@@ -12,7 +12,7 @@ import { errorText, useT } from "@/lib/i18n";
 import { useLoad } from "@/lib/useLoad";
 import { UpcomingBookings } from "@/components/upcoming-bookings";
 import { visitSchema, type VisitForm } from "@/lib/validation";
-import { Button, Card, EmptyState, ErrorState, Field, Input, MedicineList, PageHeader, Select, StatusBadge, Textarea, TicketBadge } from "@/components/common";
+import { Button, Card, EmptyState, ErrorState, Field, Input, LoadError, MedicineList, PageHeader, Select, StatusBadge, Textarea, TicketBadge } from "@/components/common";
 import { ResultView, serviceName } from "@/components/result-view";
 import { PrintButton, PrintSection } from "@/components/print";
 import { AlertsBanner, AlertsEditor } from "@/components/medical-alerts";
@@ -25,7 +25,7 @@ function History({ patientId, patientName, alerts }: { patientId: number; patien
   const { state, reload } = useLoad(() => api.patientHistory(patientId), String(patientId));
 
   if (state.status === "loading") return <CardsSkeleton count={1} />;
-  if (state.status === "error") return <ErrorState message={errorText(state.error, t)} onRetry={reload} />;
+  if (state.status === "error") return <LoadError error={state.error} onRetry={reload} />;
   if (state.data.length === 0) return <p className="text-sm text-slate-500">{t("doctor.noHistory")}</p>;
   const visits = state.data;
   return (

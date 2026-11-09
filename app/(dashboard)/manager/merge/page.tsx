@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { api, type DuplicateGroup } from "@/lib/api";
 import { errorText, useT, type MessageKey } from "@/lib/i18n";
 import { useLoad } from "@/lib/useLoad";
-import { Button, Card, EmptyState, ErrorState, Field, PageHeader, Select, Textarea } from "@/components/common";
+import { Button, Card, EmptyState, ErrorState, Field, LoadError, PageHeader, Select, Textarea } from "@/components/common";
 import { AlertsBanner } from "@/components/medical-alerts";
 import { CardsSkeleton } from "@/components/skeleton";
 
@@ -27,7 +27,7 @@ function PatientSide({ patientId, title, keep }: { patientId: number; title: str
     <Card className={`space-y-3 ${keep ? "ring-2 ring-brand-500" : ""}`} data-merge-side={keep ? "keep" : "from"}>
       <p className={`text-sm font-semibold ${keep ? "text-brand-700" : "text-slate-500"}`}>{title}</p>
       {state.status === "loading" && <CardsSkeleton count={1} />}
-      {state.status === "error" && <ErrorState message={errorText(state.error, t)} onRetry={reload} />}
+      {state.status === "error" && <LoadError error={state.error} onRetry={reload} />}
       {state.status === "success" && (
         <>
           <div>
