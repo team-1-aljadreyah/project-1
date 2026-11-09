@@ -55,10 +55,10 @@ export function StaffBell() {
         )}
       </button>
       {open && (
-        // Phone: a full-width box under the top bar. Computer: the bell is in the side menu at the screen's edge,
-        // so the panel opens toward the page (start-0: leftwards in Arabic, rightwards in English), never off-screen.
+        // Phone: a full-width box under the top bar. Computer: the panel opens beside the side menu (15rem = its md:w-60 width),
+        // so it never covers the menu links. "start" means the right side in Arabic and the left side in English.
         <div
-          className="fixed inset-x-4 top-16 z-50 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg md:absolute md:inset-x-auto md:start-0 md:top-10 md:w-80"
+          className="fixed inset-x-4 top-16 z-50 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-lg md:inset-x-auto md:start-[calc(15rem+0.75rem)] md:top-4 md:w-80"
           data-staff-notifications
         >
           <p className="border-b border-slate-200 px-4 py-2.5 text-sm font-semibold">{t("notifications.title")}</p>
